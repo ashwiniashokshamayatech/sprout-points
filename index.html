@@ -163,8 +163,8 @@
   }
   .card .more-btn{position:absolute; top:14px; right:14px;}
   .avatar{
-    width:92px; height:92px; border-radius:50%; display:flex; align-items:center; justify-content:center;
-    font-size:44px; position:relative; box-shadow:inset 0 0 0 4px rgba(255,255,255,0.55), var(--shadow-sm);
+    width:82px; height:82px; border-radius:50%; display:flex; align-items:center; justify-content:center;
+    font-size:40px; position:relative; box-shadow:inset 0 0 0 4px rgba(255,255,255,0.55), var(--shadow-sm);
     margin-bottom:10px; flex-shrink:0;
   }
   .avatar .badge{position:absolute; top:-6px; right:-6px; font-size:22px; filter:drop-shadow(0 2px 2px rgba(0,0,0,0.18));}
@@ -179,6 +179,8 @@
 
   .card h3{margin:2px 0 2px; font-size:19px; color:var(--ink);}
   .age-chip{font-size:12px; color:var(--ink-muted); font-weight:700; background:var(--border-soft); padding:2px 10px; border-radius:999px; margin-bottom:10px;}
+  .customize-btn{appearance:none; border:0; background:none; color:var(--ink-muted); cursor:pointer; font:800 11.5px var(--font-body); padding:2px 6px; margin:-6px 0 8px;}
+  .customize-btn:hover{color:var(--meadow-dark); text-decoration:underline; text-underline-offset:2px;}
 
   .points-row{display:flex; align-items:baseline; gap:6px; margin:2px 0 4px;}
   .points-num{font-family:var(--font-display); font-weight:800; font-size:38px; color:var(--meadow-dark); line-height:1;}
@@ -209,12 +211,46 @@
   @keyframes avatarExcited{0%,100%{transform:scale(1) rotate(0);}35%{transform:scale(1.08) rotate(-4deg);}70%{transform:scale(1.05) rotate(4deg);}}
   :root[data-theme="dark"] .mood-new{color:#8CE0A8;}
   @media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .mood-new{color:#8CE0A8;}}
-  @media (prefers-reduced-motion: reduce){.mood-pill,.point-float,.avatar-reaction,.avatar.react-gain,.avatar.react-minus,.avatar.react-redeem{animation:none;}.mood-pill:hover{transform:none;}}
+  @media (prefers-reduced-motion: reduce){.mood-pill,.point-float,.avatar-reaction,.avatar.react-gain,.avatar.react-minus,.avatar.react-redeem,.plant-spark{animation:none;}.plant-stage{transition:none;}.mood-pill:hover{transform:none;}}
 
   .level-row{width:100%; margin-bottom:12px;}
   .level-label{display:flex; justify-content:space-between; font-size:11.5px; font-weight:700; color:var(--ink-muted); margin-bottom:5px;}
   .level-track{height:9px; border-radius:999px; background:var(--border-soft); overflow:hidden;}
   .level-fill{height:100%; border-radius:999px; background:linear-gradient(90deg, var(--sun), var(--meadow)); transition:width 0.5s ease;}
+  .growth-progress{width:100%; margin:8px 0 4px; text-align:left;}
+  .growth-head{display:flex; justify-content:space-between; align-items:baseline; gap:8px; margin-bottom:3px; color:var(--ink-muted); font-size:11px; font-weight:800;}
+  .growth-head strong{color:var(--ink); font-family:var(--font-display); font-size:13px;}
+  .growth-scene{height:88px; position:relative; overflow:hidden; border-bottom:3px solid #B87B4B; border-radius:12px 12px 8px 8px; background:linear-gradient(180deg, var(--sky-tint) 0%, var(--meadow-tint) 78%);}
+  .growth-scene::before,.growth-scene::after{content:""; position:absolute; bottom:8px; width:28px; height:12px; border-radius:50%; background:rgba(62,158,99,0.22);}
+  .growth-scene::before{left:18%; transform:rotate(-12deg);}
+  .growth-scene::after{right:18%; transform:rotate(12deg);}
+  .plant-stage{position:absolute; left:50%; bottom:5px; z-index:1; font-size:50px; line-height:1; transform:translateX(-50%) scale(0.9); transform-origin:bottom center; filter:drop-shadow(0 2px 1px rgba(43,58,51,0.14)); transition:transform 0.45s ease;}
+  .plant-spark{position:absolute; z-index:1; font-size:14px; animation:plantSpark 2.4s ease-in-out infinite;}
+  .plant-spark.one{left:30%; top:20px;}
+  .plant-spark.two{right:29%; top:12px; animation-delay:0.8s;}
+  .growth-caption{display:flex; justify-content:space-between; gap:8px; margin-top:5px; color:var(--ink-muted); font-size:11px; font-weight:800;}
+  .growth-caption span:last-child{text-align:right;}
+  @keyframes plantSpark{0%,100%{opacity:0.35; transform:translateY(2px) scale(0.9);}50%{opacity:1; transform:translateY(-2px) scale(1.1);}}
+  @media (prefers-reduced-motion: reduce){.plant-spark{animation:none;}.plant-stage{transition:none;}}
+
+  .card[data-theme="ocean"]{--meadow:#1789B5;--meadow-dark:#176A8A;--meadow-tint:#DDF4FB;--sun-tint:#FFF0D1;}
+  .card[data-theme="ocean"]{background:radial-gradient(circle at 15% 10%,rgba(255,255,255,0.8),transparent 32%),linear-gradient(145deg,#E6FAFC,#CBEAF5);}
+  .card[data-theme="ocean"] .growth-scene{background:linear-gradient(180deg,#DDF4FB,#CDECF4);border-bottom-color:#3F9BBA;}
+  .card[data-theme="space"]{--meadow:#5B6FE0;--meadow-dark:#4658B8;--meadow-tint:#E7E9FF;--sun-tint:#FFF0D2;}
+  .card[data-theme="space"]{background:radial-gradient(circle at 82% 12%,rgba(255,220,126,0.5) 0 2px,transparent 3px),radial-gradient(circle at 18% 28%,rgba(255,255,255,0.7) 0 1.5px,transparent 2.5px),linear-gradient(145deg,#EEF0FF,#DDE3FF);}
+  .card[data-theme="space"] .growth-scene{background:linear-gradient(180deg,#202B62,#4A5EAC);border-bottom-color:#1B234D;}
+  .card[data-theme="space"] .growth-scene::before,.card[data-theme="space"] .growth-scene::after{background:rgba(255,255,255,0.35);}
+  .card[data-theme="dino"]{--meadow:#6B9B3F;--meadow-dark:#52782F;--meadow-tint:#EAF3D9;--sun-tint:#FFF0D3;}
+  .card[data-theme="dino"]{background:radial-gradient(circle at 88% 14%,rgba(255,255,255,0.7),transparent 30%),linear-gradient(145deg,#F0F7DF,#D8EBC5);}
+  .card[data-theme="dino"] .growth-scene{background:linear-gradient(180deg,#E5F1D4,#C9E3B2);border-bottom-color:#9B7047;}
+  .card[data-theme="sticker"]{--meadow:#E34D72;--meadow-dark:#B63456;--meadow-tint:#FDE5EC;--sun-tint:#FFF2C9;}
+  .card[data-theme="sticker"]{background:radial-gradient(circle at 14% 12%,rgba(255,255,255,0.9) 0 5px,transparent 6px),radial-gradient(circle at 86% 18%,rgba(255,201,60,0.35) 0 7px,transparent 8px),linear-gradient(145deg,#FFF1F6,#FFE7CE);}
+  .card[data-theme="sticker"] .growth-scene{background:linear-gradient(180deg,#FFF0F5,#FFE2B8);border-bottom-color:#F0A45A;}
+  .card[data-theme="mermaid"]{--meadow:#20AFA8;--meadow-dark:#147A78;--meadow-tint:#DDF7F4;--sun-tint:#FFF0CE;}
+  .card[data-theme="mermaid"]{background:radial-gradient(circle at 12% 15%,rgba(255,255,255,0.8) 0 4px,transparent 5px),radial-gradient(circle at 88% 28%,rgba(255,255,255,0.55) 0 6px,transparent 7px),linear-gradient(145deg,#E3FBF6,#C6E9EE);}
+  .card[data-theme="mermaid"] .growth-scene{background:linear-gradient(180deg,#D9F7F7,#A8DCE2);border-bottom-color:#B98262;}
+  .card[data-theme="garden"]{background:radial-gradient(circle at 14% 12%,rgba(255,255,255,0.85),transparent 34%),linear-gradient(145deg,#F2FAE9,#DDF1E2);}
+  .card[data-theme="mermaid"] .growth-scene::before,.card[data-theme="mermaid"] .growth-scene::after{background:rgba(32,175,168,0.28);}
 
   .streak-chip{font-size:12px; font-weight:700; color:#B5651D; background:#FFE9D2; padding:3px 10px; border-radius:999px; margin-bottom:10px; display:inline-flex; gap:5px; align-items:center;}
   :root[data-theme="dark"] .streak-chip{background:#3D2B18; color:#F0B676;}
@@ -298,6 +334,10 @@
   .chip-opt.sel{border-color:var(--meadow); background:var(--meadow-tint); color:var(--meadow-dark);}
   :root[data-theme="dark"] .chip-opt.sel{color:#8CE0A8;}
   @media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .chip-opt.sel{color:#8CE0A8;}}
+  .theme-grid{display:grid; grid-template-columns:repeat(auto-fit, minmax(74px, 1fr)); gap:7px;}
+  .theme-opt{appearance:none; border:2px solid var(--border); border-radius:var(--radius-md); background:var(--surface-2); color:var(--ink); cursor:pointer; padding:8px 4px; font:700 12px var(--font-body); text-align:center;}
+  .theme-opt .theme-icon{display:block; font-size:22px; margin-bottom:3px;}
+  .theme-opt.sel{border-color:var(--meadow); background:var(--meadow-tint); color:var(--meadow-dark);}
 
   .avatar-preview-wrap{display:flex; justify-content:center; margin-bottom:16px;}
 
@@ -379,7 +419,7 @@
   @media (max-width:480px){
     .grid{grid-template-columns:1fr;}
     .card{padding:16px 12px 14px;}
-    .avatar{width:76px; height:76px; font-size:36px;}
+    .avatar{width:68px; height:68px; font-size:32px;}
     .points-num{font-size:30px;}
     .card-actions{flex-wrap:wrap;}
     .card-actions .btn{min-width:calc(50% - 4px);}
@@ -457,6 +497,15 @@
     {id:"dots", label:"Dots"},
     {id:"stripes", label:"Stripes"},
     {id:"sparkle", label:"Sparkle"}
+  ];
+
+  var THEMES = [
+    {id:"garden", label:"Garden", emoji:"🌿", color:"#3E9E63", stages:["Seed","Sprout","Sapling","Budding Bush","Blooming Flower","Young Tree","Mighty Tree","Garden Legend"], task:"Chores", taskSub:"View today", reward:"Rewards", rewardSub:"Browse & redeem", emptyTask:"No garden tasks today", emptyReward:"Plant a reward to grow toward", gain:"😊", minus:"😟", redeem:"🤩"},
+    {id:"ocean", label:"Ocean", emoji:"🌊", color:"#3FA9D6", stages:["Tide Pool","Swimmer","Diver","Coral Keeper","Reef Builder","Wave Rider","Ocean Hero","Sea Legend"], task:"Missions", taskSub:"Dive in today", reward:"Treasures", rewardSub:"Explore & redeem", emptyTask:"No missions for today", emptyReward:"Add treasure to chase", gain:"🐬", minus:"🌧️", redeem:"🤩"},
+    {id:"space", label:"Space", emoji:"🚀", color:"#5B6FE0", stages:["Launch Pad","Orbit","Space Scout","Moon Walker","Star Pilot","Cosmic Captain","Galaxy Guide","Space Legend"], task:"Missions", taskSub:"Launch today", reward:"Targets", rewardSub:"Explore & redeem", emptyTask:"No missions queued", emptyReward:"Choose a star target", gain:"🚀", minus:"🛰️", redeem:"🌟"},
+    {id:"dino", label:"Dino", emoji:"🦖", color:"#78A84A", stages:["Dino Egg","Hatchling","Tracker","Fossil Finder","Ranger","Dino Expert","Ancient Guide","Dino Legend"], task:"Discoveries", taskSub:"Explore today", reward:"Dino gear", rewardSub:"Discover & redeem", emptyTask:"No discoveries today", emptyReward:"Add a fossil goal", gain:"🦕", minus:"😮", redeem:"🦖"},
+    {id:"sticker", label:"Sticker", emoji:"⭐", color:"#F0537A", stages:["First Sticker","Collector","Star Maker","Sticker Pro","Super Collector","Shiny Star","Sticker Hero","Collection Legend"], task:"Sticker tasks", taskSub:"Collect today", reward:"Sticker goals", rewardSub:"Collect & redeem", emptyTask:"No sticker tasks today", emptyReward:"Add a sticker goal", gain:"⭐", minus:"💭", redeem:"🎉"},
+    {id:"mermaid", label:"Mermaid", emoji:"🧜‍♀️", color:"#20B8B0", stages:["Tiny Shell","Sea Friend","Coral Dancer","Pearl Keeper","Wave Singer","Tide Guardian","Ocean Star","Mermaid Legend"], task:"Quests", taskSub:"Dive in today", reward:"Pearl goals", rewardSub:"Discover & redeem", emptyTask:"No sea quests today", emptyReward:"Add a pearl goal", gain:"🫧", minus:"🌧️", redeem:"🐚"}
   ];
 
   var BADGES = [
@@ -681,6 +730,9 @@
       badge: ""
     };
   }
+  function themeInfo(id){
+    return THEMES.find(function(theme){ return theme.id === id; }) || THEMES[0];
+  }
 
   /* ================= Toast ================= */
   function toast(msg, kind, action){
@@ -758,34 +810,38 @@
     var lvl = levelInfo(lifetime);
     var mood = moodOf(child);
     var streak = streakOf(child);
+    var theme = themeInfo(child.theme);
     var todaysChores = choresForToday(child);
     var openChores = todaysChores.filter(function(chore){ return !completedChoreToday(child, chore); });
     var feeling = feelingOf(child);
-    var nextLabel = lvl.next ? lvl.next.name : "Max level!";
+    var currentStage = theme.stages[lvl.index] || lvl.current.name;
+    var nextStage = lvl.next ? (theme.stages[lvl.index + 1] || lvl.next.name) : "Fully grown";
     return '' +
-    '<div class="card" data-id="' + child.id + '">' +
+    '<div class="card" data-id="' + child.id + '" data-theme="' + theme.id + '">' +
       '<button class="btn btn-ghost btn-icon more-btn" data-action="menu" data-id="' + child.id + '" aria-label="More options" type="button">⋯</button>' +
       avatarHTML(child.avatar, "") +
       '<h3>' + escapeHTML(child.name) + '</h3>' +
       '<div class="age-chip">Age ' + child.age + '</div>' +
+      '<button class="customize-btn" data-action="customize" data-id="' + child.id + '" type="button">🎨 Customize my world</button>' +
       '<div class="points-row"><span class="points-num' + (bal<0?" neg":"") + '">' + bal + '</span><span class="points-label">points</span></div>' +
       '<button class="mood-pill ' + mood.cls + '" data-action="mood" data-id="' + child.id + '" type="button" title="Set today\'s feeling">' + mood.emoji + ' ' + mood.label + '</button>' +
       (feeling ? '<div class="feeling-label">Feeling: ' + feeling.emoji + ' ' + feeling.label + '</div>' : '<div class="feeling-label">Tap mood to share today\'s feeling</div>') +
       (streak >= 2 ? '<div class="streak-chip">🔥 ' + streak + '-day streak</div>' : '') +
-      '<div class="level-row">' +
-        '<div class="level-label"><span>' + lvl.current.icon + ' ' + lvl.current.name + '</span><span>' + (lvl.next ? "Next: " + nextLabel : "Top level!") + '</span></div>' +
-        '<div class="level-track"><div class="level-fill" style="width:' + Math.round(lvl.progress*100) + '%"></div></div>' +
+      '<div class="growth-progress" role="img" aria-label="' + escapeHTML(currentStage + ", " + lifetime + (lvl.next ? " of " + lvl.next.min : "") + " points") + '">' +
+        '<div class="growth-head"><strong>' + theme.emoji + ' ' + currentStage + '</strong><span>' + (lvl.next ? lifetime + ' / ' + lvl.next.min + ' points' : lifetime + ' points') + '</span></div>' +
+        '<div class="growth-scene"><span class="plant-spark one">✦</span><span class="plant-spark two">✦</span><span class="plant-stage" style="transform:translateX(-50%) scale(' + (0.8 + lvl.progress*0.35).toFixed(2) + ')">' + theme.emoji + '</span></div>' +
+        '<div class="growth-caption"><span>' + Math.round(lvl.progress*100) + '% grown</span><span>' + (lvl.next ? 'Next: ' + nextStage : 'Fully grown') + '</span></div>' +
       '</div>' +
       '<div class="routine-summary' + (todaysChores.length ? '' : ' empty') + '">' +
-        (todaysChores.length ? (openChores.length ? '🧹 ' + openChores.length + ' chore' + (openChores.length===1?'':'s') + ' waiting today' : '✅ Today\'s chores are complete') : 'No chores scheduled today') +
+        (todaysChores.length ? (openChores.length ? theme.emoji + ' ' + openChores.length + ' ' + theme.task.toLowerCase() + ' waiting today' : '✅ Today\'s ' + theme.task.toLowerCase() + ' are complete') : theme.emptyTask) +
       '</div>' +
       '<div class="card-actions">' +
         '<button class="btn btn-meadow" data-action="add" data-id="' + child.id + '" type="button">+ Points</button>' +
         '<button class="btn btn-berry" data-action="deduct" data-id="' + child.id + '" type="button">− Points</button>' +
       '</div>' +
       '<div class="feature-actions">' +
-        '<button class="feature-action chore" data-action="chores" data-id="' + child.id + '" type="button"><span class="feature-icon">🧹</span><span><strong>Chores</strong><small>View today</small></span></button>' +
-        '<button class="feature-action reward" data-action="catalog" data-id="' + child.id + '" type="button"><span class="feature-icon">🎁</span><span><strong>Rewards</strong><small>Browse &amp; redeem</small></span></button>' +
+        '<button class="feature-action chore" data-action="chores" data-id="' + child.id + '" type="button"><span class="feature-icon">' + theme.emoji + '</span><span><strong>' + theme.task + '</strong><small>' + theme.taskSub + '</small></span></button>' +
+        '<button class="feature-action reward" data-action="catalog" data-id="' + child.id + '" type="button"><span class="feature-icon">' + theme.emoji + '</span><span><strong>' + theme.reward + '</strong><small>' + theme.rewardSub + '</small></span></button>' +
       '</div>' +
       '<div class="card-foot"><button class="link-btn" data-action="history" data-id="' + child.id + '" type="button">View history &amp; garden chart</button></div>' +
     '</div>';
@@ -811,6 +867,7 @@
         if (action === "catalog") return openCatalogModal(id);
         if (action === "mood") return openMoodModal(id);
         if (action === "history") return openHistoryModal(id);
+        if (action === "customize") return openChildModal(id, true);
       });
     });
   }
@@ -923,12 +980,13 @@
   function openChoresModal(childId){
     var child = state.children.find(function(c){ return c.id === childId; });
     if (!child) return;
+    var theme = themeInfo(child.theme);
     var chores = choresForToday(child);
     var rows = chores.length ? chores.map(function(chore){
       var done = completedChoreToday(child, chore);
-      return '<div class="catalog-item"><div class="item-icon">' + (done ? '✅' : '🧹') + '</div><div class="item-copy"><strong>' + escapeHTML(chore.name) + '</strong><small>+' + chore.points + ' points</small></div>' + (done ? '<span class="hint">Done today</span>' : '<button class="btn btn-meadow btn-sm" type="button" data-complete-chore="' + chore.id + '">Complete</button>') + '</div>';
-    }).join("") : '<div class="empty-hist">No chores are scheduled for today.</div>';
-    openModal('<div class="modal-head"><div><h2>' + escapeHTML(child.name) + '\'s chores</h2><p>Complete each task once today to grow the garden.</p></div><button class="btn btn-text" id="closeX" type="button" aria-label="Close">✕</button></div><div class="catalog-list">' + rows + '</div>');
+      return '<div class="catalog-item"><div class="item-icon">' + (done ? '✅' : theme.emoji) + '</div><div class="item-copy"><strong>' + escapeHTML(chore.name) + '</strong><small>+' + chore.points + ' points</small></div>' + (done ? '<span class="hint">Done today</span>' : '<button class="btn btn-meadow btn-sm" type="button" data-complete-chore="' + chore.id + '">Complete</button>') + '</div>';
+    }).join("") : '<div class="empty-hist">' + theme.emptyTask + '.</div>';
+    openModal('<div class="modal-head"><div><h2>' + escapeHTML(child.name) + '\'s ' + theme.task.toLowerCase() + '</h2><p>Complete each ' + theme.task.toLowerCase().replace(/s$/, "") + ' to grow the world.</p></div><button class="btn btn-text" id="closeX" type="button" aria-label="Close">✕</button></div><div class="catalog-list">' + rows + '</div>');
     document.getElementById("closeX").addEventListener("click", closeModal);
     document.querySelectorAll("[data-complete-chore]").forEach(function(btn){
       btn.addEventListener("click", function(){
@@ -936,7 +994,7 @@
         if (!chore || completedChoreToday(child, chore)) return;
         var transactionId = uid();
         child.transactions.push({id:transactionId, ts:new Date().toISOString(), type:"chore", amount:chore.points, note:"Chore: " + chore.name, choreId:chore.id});
-        saveData(); render(); pointBurst(child, chore.points); avatarReaction(child, "😊", "gain"); closeModal();
+        saveData(); render(); pointBurst(child, chore.points); avatarReaction(child, theme.gain, "gain"); closeModal();
         toast("+" + chore.points + " points for " + child.name + "!", "", {label:"Undo", callback:function(){
           requestParentAccess(function(){
             child.transactions = child.transactions.filter(function(t){ return t.id !== transactionId; });
@@ -950,12 +1008,13 @@
   function openCatalogModal(childId){
     var child = state.children.find(function(c){ return c.id === childId; });
     if (!child) return;
+    var theme = themeInfo(child.theme);
     var balance = balanceOf(child);
     var rows = state.rewards.filter(function(reward){ return reward.active !== false; }).map(function(reward){
       var affordable = balance >= reward.cost;
       return '<div class="catalog-item"><div class="item-icon">' + escapeHTML(reward.emoji) + '</div><div class="item-copy"><strong>' + escapeHTML(reward.name) + '</strong><small>' + reward.cost + ' points</small></div><button class="btn btn-sky btn-sm" type="button" data-claim-reward="' + reward.id + '" ' + (affordable ? '' : 'disabled') + '>' + (affordable ? 'Redeem' : 'Need more') + '</button></div>';
-    }).join("") || '<div class="empty-hist">No rewards have been added yet.</div>';
-    openModal('<div class="modal-head"><div><h2>' + escapeHTML(child.name) + '\'s rewards</h2><p>Available balance: <strong>' + balance + ' points</strong></p></div><button class="btn btn-text" id="closeX" type="button" aria-label="Close">✕</button></div><div class="catalog-list">' + rows + '</div><div class="modal-actions"><button class="btn btn-ghost" id="manualRedeemBtn" type="button" ' + (balance < 1 ? 'disabled' : '') + '>Redeem manually</button></div>');
+    }).join("") || '<div class="empty-hist">' + theme.emptyReward + '.</div>';
+    openModal('<div class="modal-head"><div><h2>' + escapeHTML(child.name) + '\'s ' + theme.reward.toLowerCase() + '</h2><p>Available balance: <strong>' + balance + ' points</strong></p></div><button class="btn btn-text" id="closeX" type="button" aria-label="Close">✕</button></div><div class="catalog-list">' + rows + '</div><div class="modal-actions"><button class="btn btn-ghost" id="manualRedeemBtn" type="button" ' + (balance < 1 ? 'disabled' : '') + '>Redeem manually</button></div>');
     document.getElementById("closeX").addEventListener("click", closeModal);
     document.getElementById("manualRedeemBtn").addEventListener("click", function(){ requestParentAccess(function(){ closeModal(); openRedeemModal(childId); }); });
     document.querySelectorAll("[data-claim-reward]").forEach(function(btn){
@@ -964,7 +1023,7 @@
           var reward = state.rewards.find(function(item){ return item.id === btn.getAttribute("data-claim-reward"); });
           if (!reward || balanceOf(child) < reward.cost) return;
           child.transactions.push({id:uid(), ts:new Date().toISOString(), type:"redeem", amount:reward.cost, note:"Reward: " + reward.name, rewardId:reward.id});
-          saveData(); render(); closeModal(); avatarReaction(child, "🤩", "redeem"); confettiBurst(child.avatar.color); toast("🎁 " + child.name + " redeemed " + reward.name + "!");
+          saveData(); render(); closeModal(); avatarReaction(child, theme.redeem, "redeem"); confettiBurst(child.avatar.color); toast(theme.emoji + " " + child.name + " redeemed " + reward.name + "!");
         });
       });
     });
@@ -1003,23 +1062,27 @@
   }
 
   /* ================= Add / Edit Child Modal ================= */
-  function openChildModal(childId){
+  function openChildModal(childId, customizeOnly){
     var editing = !!childId;
     var child = editing ? state.children.find(function(c){return c.id===childId;}) : null;
     var draft = {
       name: child ? child.name : "",
       age: child ? child.age : 6,
-      avatar: child ? JSON.parse(JSON.stringify(child.avatar)) : defaultAvatar()
+      avatar: child ? JSON.parse(JSON.stringify(child.avatar)) : defaultAvatar(),
+      theme: child ? themeInfo(child.theme).id : "garden"
     };
 
     function html(){
       return '' +
-      '<div class="modal-head"><div><h2>' + (editing ? "Edit " + escapeHTML(draft.name || "child") + "'s profile" : "Add a child") + '</h2>' +
-      '<p>Give them a name, age, and a Garden Buddy avatar.</p></div>' +
+      '<div class="modal-head"><div><h2>' + (customizeOnly ? "Customize " + escapeHTML(draft.name || "your world") : (editing ? "Edit " + escapeHTML(draft.name || "child") + "'s profile" : "Add a child")) + '</h2>' +
+      '<p>' + (customizeOnly ? "Choose your avatar, world, pattern, and badge." : "Give them a name, age, and a Garden Buddy avatar.") + '</p></div>' +
       '<button class="btn btn-text" id="closeX" type="button" aria-label="Close">✕</button></div>' +
       '<div class="avatar-preview-wrap">' + avatarHTML(draft.avatar, "lg") + '</div>' +
-      '<div class="field"><label for="cName">Child\'s name</label><input type="text" id="cName" maxlength="24" value="' + escapeHTML(draft.name) + '" placeholder="e.g. Maya"></div>' +
-      '<div class="field"><label for="cAge">Age</label><input type="number" id="cAge" min="1" max="18" value="' + draft.age + '"></div>' +
+      (customizeOnly ? '' : '<div class="field"><label for="cName">Child\'s name</label><input type="text" id="cName" maxlength="24" value="' + escapeHTML(draft.name) + '" placeholder="e.g. Maya"></div>' +
+      '<div class="field"><label for="cAge">Age</label><input type="number" id="cAge" min="1" max="18" value="' + draft.age + '"></div>') +
+      '<div class="field"><label>Choose their world</label><div class="theme-grid" id="themeGrid">' +
+        THEMES.map(function(theme){ return '<button type="button" class="theme-opt' + (theme.id===draft.theme ? " sel" : "") + '" data-theme-option="' + theme.id + '"><span class="theme-icon">' + theme.emoji + '</span>' + theme.label + '</button>'; }).join("") +
+      '</div></div>' +
       '<div class="field"><label>Pick a Garden Buddy</label><div class="emoji-grid" id="creatureGrid">' +
         CREATURES.map(function(c){ return '<button type="button" class="emoji-opt' + (c===draft.avatar.creature?" sel":"") + '" data-c="' + c + '">' + c + '</button>'; }).join("") +
       '</div></div>' +
@@ -1035,7 +1098,7 @@
       '<div class="error-text" id="childErr"></div>' +
       '<div class="modal-actions">' +
         '<button class="btn btn-ghost" id="cancelBtn" type="button">Cancel</button>' +
-        '<button class="btn btn-meadow" id="saveBtn" type="button">' + (editing ? "Save changes" : "Add child") + '</button>' +
+        '<button class="btn btn-meadow" id="saveBtn" type="button">' + (customizeOnly ? "Save my world" : (editing ? "Save changes" : "Add child")) + '</button>' +
       '</div>';
     }
 
@@ -1049,8 +1112,17 @@
     function wire(){
       document.getElementById("closeX").addEventListener("click", closeModal);
       document.getElementById("cancelBtn").addEventListener("click", closeModal);
-      document.getElementById("cName").addEventListener("input", function(e){ draft.name = e.target.value; });
-      document.getElementById("cAge").addEventListener("input", function(e){ draft.age = e.target.value; });
+      if (!customizeOnly){
+        document.getElementById("cName").addEventListener("input", function(e){ draft.name = e.target.value; });
+        document.getElementById("cAge").addEventListener("input", function(e){ draft.age = e.target.value; });
+      }
+      document.getElementById("themeGrid").querySelectorAll("button").forEach(function(button){
+        button.addEventListener("click", function(){
+          draft.theme = button.getAttribute("data-theme-option");
+          document.querySelectorAll("#themeGrid .theme-opt").forEach(function(item){ item.classList.remove("sel"); });
+          button.classList.add("sel");
+        });
+      });
       document.getElementById("creatureGrid").querySelectorAll("button").forEach(function(b){
         b.addEventListener("click", function(){
           draft.avatar.creature = b.getAttribute("data-c");
@@ -1083,14 +1155,15 @@
         var name = (draft.name || "").trim();
         var age = parseInt(draft.age, 10);
         var err = document.getElementById("childErr");
-        if (!name){ err.textContent = "Please enter a name."; return; }
-        if (!age || age < 1 || age > 18){ err.textContent = "Please enter a valid age (1–18)."; return; }
+        if (!customizeOnly && !name){ err.textContent = "Please enter a name."; return; }
+        if (!customizeOnly && (!age || age < 1 || age > 18)){ err.textContent = "Please enter a valid age (1–18)."; return; }
         if (editing){
-          child.name = name; child.age = age; child.avatar = draft.avatar;
-          toast(name + "'s profile was updated!");
+          if (!customizeOnly){ child.name = name; child.age = age; }
+          child.avatar = draft.avatar; child.theme = draft.theme;
+          toast(customizeOnly ? "Your world was updated!" : name + "'s profile was updated!");
         } else {
           state.children.push({
-            id: uid(), name: name, age: age, avatar: draft.avatar,
+            id: uid(), name: name, age: age, avatar: draft.avatar, theme: draft.theme,
             transactions: [], createdAt: new Date().toISOString()
           });
           toast(name + " joined the garden! 🌱");
@@ -1167,15 +1240,16 @@
 
   function addTransaction(child, type, amount, note){
     var beforeLevel = levelInfo(lifetimeOf(child)).index;
+    var theme = themeInfo(child.theme);
     child.transactions.push({ id: uid(), ts: new Date().toISOString(), type: type, amount: amount, note: note });
     saveData(); render();
-    if (type === "add") { pointBurst(child, amount); avatarReaction(child, "😊", "gain"); }
-    if (type === "deduct") avatarReaction(child, "😟", "minus");
+    if (type === "add") { pointBurst(child, amount); avatarReaction(child, theme.gain, "gain"); }
+    if (type === "deduct") avatarReaction(child, theme.minus, "minus");
     if (type === "add"){
       var afterLevel = levelInfo(lifetimeOf(child)).index;
       if (afterLevel > beforeLevel){
         confettiBurst(child.avatar.color);
-        toast("🎉 " + child.name + " leveled up to " + LEVELS[afterLevel].name + "!");
+        toast(theme.emoji + " " + child.name + " reached " + theme.stages[afterLevel] + "!");
       } else {
         toast("+" + amount + " points for " + child.name + "!");
       }
@@ -1188,6 +1262,7 @@
   function openRedeemModal(childId){
     var child = state.children.find(function(c){return c.id===childId;});
     if (!child) return;
+    var theme = themeInfo(child.theme);
     var bal = balanceOf(child);
     var draft = { amount: Math.min(10, Math.max(1,bal)), reason: "" };
 
@@ -1247,7 +1322,7 @@
       if (!note){ err.textContent = "Please pick or write what they're redeeming for."; return; }
       child.transactions.push({ id: uid(), ts: new Date().toISOString(), type:"redeem", amount: amount, note: "Redeemed: " + note });
       saveData(); render(); closeModal();
-      avatarReaction(child, "🤩", "redeem");
+      avatarReaction(child, theme.redeem, "redeem");
       confettiBurst(child.avatar.color);
       toast("🎁 " + child.name + " redeemed " + amount + " points for " + note + "!");
     });
@@ -1298,9 +1373,10 @@
     if (!child) return;
     var bal = balanceOf(child);
     var lvl = levelInfo(lifetimeOf(child));
+    var theme = themeInfo(child.theme);
 
     function txRowHTML(t){
-      var icon = (t.type === "add" || t.type === "chore") ? "🌱" : (t.type === "deduct" ? "🍂" : "🎁");
+      var icon = (t.type === "add" || t.type === "chore") ? theme.gain : (t.type === "deduct" ? theme.minus : theme.redeem);
       var cls = t.type;
       var sign = (t.type === "add" || t.type === "chore") ? "+" : "−";
       var amtCls = (t.type === "add" || t.type === "chore") ? "pos" : "negv";
@@ -1314,7 +1390,7 @@
     }
 
     function listHTML(){
-      if (child.transactions.length === 0) return '<div class="empty-hist">No points logged yet. Add some points to get started!</div>';
+      if (child.transactions.length === 0) return '<div class="empty-hist">No ' + theme.task.toLowerCase() + ' or rewards logged yet. Start exploring!</div>';
       var sorted = child.transactions.slice().sort(function(a,b){ return new Date(b.ts) - new Date(a.ts); });
       var groups = {};
       var order = [];
@@ -1332,7 +1408,7 @@
       return '' +
       '<div class="modal-head">' +
         '<div class="hist-head" style="margin-bottom:0;">' + avatarHTML(child.avatar, "sm") +
-          '<div class="info"><h2>' + escapeHTML(child.name) + '</h2><div class="lvl">' + lvl.current.icon + ' ' + lvl.current.name + '</div><div class="lvl">' + bal + ' points saved</div></div>' +
+          '<div class="info"><h2>' + escapeHTML(child.name) + '</h2><div class="lvl">' + theme.emoji + ' ' + theme.stages[lvl.index] + '</div><div class="lvl">' + bal + ' points saved</div></div>' +
         '</div>' +
         '<button class="btn btn-text" id="closeX" type="button" aria-label="Close">✕</button>' +
       '</div>' +
