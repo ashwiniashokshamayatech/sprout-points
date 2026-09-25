@@ -79,6 +79,7 @@
   }
 
   *{box-sizing:border-box;}
+  [hidden]{display:none !important;}
   html,body{scroll-padding-top:var(--safe-t);}
   body{
     margin:0;
@@ -140,6 +141,7 @@
   .btn-sm{padding:8px 14px; font-size:13.5px;}
   .btn-icon{padding:9px; border-radius:999px; width:38px; height:38px; justify-content:center;}
   .btn[disabled]{opacity:0.45; cursor:not-allowed; transform:none;}
+  .toast-action{appearance:none; border:1px solid rgba(255,255,255,0.45); border-radius:999px; background:transparent; color:inherit; cursor:pointer; font:inherit; font-size:12px; font-weight:900; padding:4px 9px; pointer-events:auto;}
 
   main{padding-top:22px;}
 
@@ -166,6 +168,10 @@
     margin-bottom:10px; flex-shrink:0;
   }
   .avatar .badge{position:absolute; top:-6px; right:-6px; font-size:22px; filter:drop-shadow(0 2px 2px rgba(0,0,0,0.18));}
+  .avatar-reaction{position:absolute; top:-21px; left:50%; font-size:25px; line-height:1; pointer-events:none; z-index:3; animation:reactionPop 1.35s ease-out forwards;}
+  .avatar.react-gain{animation:avatarCelebrate 0.8s ease-in-out;}
+  .avatar.react-minus{animation:avatarComfort 0.8s ease-in-out;}
+  .avatar.react-redeem{animation:avatarExcited 0.9s ease-in-out;}
   .avatar.sm{width:44px; height:44px; font-size:22px;}
   .avatar.sm .badge{font-size:13px; top:-4px; right:-4px;}
   .avatar.lg{width:120px; height:120px; font-size:58px;}
@@ -181,17 +187,29 @@
   .points-num.neg{color:var(--berry);}
   .points-label{font-size:13px; color:var(--ink-muted); font-weight:700;}
 
-  .mood-pill{display:inline-flex; align-items:center; gap:6px; font-size:12.5px; font-weight:700; padding:5px 12px; border-radius:999px; margin-bottom:12px;}
+  .mood-pill{appearance:none; border:0; cursor:pointer; display:inline-flex; align-items:center; gap:6px; font-size:12.5px; font-weight:700; padding:5px 12px; border-radius:999px; margin-bottom:5px; transition:transform 0.2s ease, box-shadow 0.2s ease;}
+  .mood-pill:hover{transform:translateY(-1px); box-shadow:var(--shadow-sm);}
   .mood-sunny{background:var(--sun-tint); color:#8A6A0E;}
+  .mood-sunny{animation:moodGlow 2.8s ease-in-out infinite;}
   :root[data-theme="dark"] .mood-sunny{color:#F4D889;}
   @media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .mood-sunny{color:#F4D889;}}
-  .mood-partly{background:var(--sky-tint); color:#2C6E8C;}
+  .mood-partly{background:var(--sky-tint); color:#2C6E8C; animation:cloudDrift 3.5s ease-in-out infinite;}
   :root[data-theme="dark"] .mood-partly{color:#9FD6EE;}
   @media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .mood-partly{color:#9FD6EE;}}
-  .mood-cloudy{background:var(--cloud-tint); color:var(--cloud-ink);}
+  .mood-cloudy{background:var(--cloud-tint); color:var(--cloud-ink); animation:cloudDrift 4.5s ease-in-out infinite;}
   .mood-new{background:var(--meadow-tint); color:var(--meadow-dark);}
+  .feeling-label{font-size:11.5px; color:var(--ink-muted); font-weight:700; margin-bottom:9px;}
+  .point-float{position:absolute; left:50%; top:112px; color:var(--meadow-dark); font-family:var(--font-display); font-size:22px; font-weight:800; pointer-events:none; animation:pointFloat 1.1s ease-out forwards; z-index:4;}
+  @keyframes moodGlow{0%,100%{box-shadow:0 0 0 rgba(255,201,60,0);}50%{box-shadow:0 0 0 5px rgba(255,201,60,0.18);}}
+  @keyframes cloudDrift{0%,100%{transform:translateX(0);}50%{transform:translateX(3px);}}
+  @keyframes pointFloat{0%{opacity:0; transform:translate(-50%,8px) scale(0.8);}20%{opacity:1;}100%{opacity:0; transform:translate(-50%,-30px) scale(1.05);}}
+  @keyframes reactionPop{0%{opacity:0; transform:translate(-50%,8px) scale(0.55) rotate(-10deg);}20%{opacity:1; transform:translate(-50%,0) scale(1.1) rotate(5deg);}100%{opacity:0; transform:translate(-50%,-34px) scale(0.9) rotate(0);}}
+  @keyframes avatarCelebrate{0%,100%{transform:translateY(0) rotate(0);}35%{transform:translateY(-7px) rotate(-5deg);}70%{transform:translateY(-3px) rotate(5deg);}}
+  @keyframes avatarComfort{0%,100%{transform:translateX(0);}25%{transform:translateX(-3px);}50%{transform:translateX(3px);}75%{transform:translateX(-2px);}}
+  @keyframes avatarExcited{0%,100%{transform:scale(1) rotate(0);}35%{transform:scale(1.08) rotate(-4deg);}70%{transform:scale(1.05) rotate(4deg);}}
   :root[data-theme="dark"] .mood-new{color:#8CE0A8;}
   @media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .mood-new{color:#8CE0A8;}}
+  @media (prefers-reduced-motion: reduce){.mood-pill,.point-float,.avatar-reaction,.avatar.react-gain,.avatar.react-minus,.avatar.react-redeem{animation:none;}.mood-pill:hover{transform:none;}}
 
   .level-row{width:100%; margin-bottom:12px;}
   .level-label{display:flex; justify-content:space-between; font-size:11.5px; font-weight:700; color:var(--ink-muted); margin-bottom:5px;}
@@ -204,7 +222,35 @@
 
   .card-actions{display:flex; gap:8px; width:100%; margin-top:auto; padding-top:6px;}
   .card-actions .btn{flex:1; padding:10px 6px; font-size:13px; justify-content:center;}
+  .feature-actions{display:grid; grid-template-columns:1fr 1fr; gap:8px; width:100%; margin-top:10px;}
+  .feature-action{appearance:none; border:1.5px solid var(--border); border-radius:var(--radius-md); background:var(--surface-2); color:var(--ink); cursor:pointer; display:flex; align-items:center; gap:8px; min-width:0; padding:10px; text-align:left; transition:transform 0.12s ease, border-color 0.12s ease, box-shadow 0.12s ease;}
+  .feature-action:hover{transform:translateY(-1px); box-shadow:var(--shadow-sm);}
+  .feature-action.chore{border-color:var(--meadow); background:var(--meadow-tint);}
+  .feature-action.reward{border-color:var(--sun); background:var(--sun-tint);}
+  .feature-action .feature-icon{font-size:22px; line-height:1; flex-shrink:0;}
+  .feature-action strong,.feature-action small{display:block; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
+  .feature-action strong{font-family:var(--font-display); font-size:13.5px;}
+  .feature-action small{color:var(--ink-muted); font-size:10.5px; font-weight:800; margin-top:2px;}
   .card-foot{margin-top:10px;}
+  .routine-summary{width:100%; margin:2px 0 10px; padding:9px 10px; border-radius:var(--radius-md); background:var(--meadow-tint); color:var(--meadow-dark); font-size:12px; font-weight:800; text-align:left;}
+  .routine-summary.empty{padding:9px 10px; margin:2px 0 10px; border:0; background:var(--border-soft); color:var(--ink-muted);}
+  .catalog-list{display:flex; flex-direction:column; gap:8px; margin-bottom:14px;}
+  .catalog-item{display:flex; align-items:center; gap:10px; padding:10px 12px; border:1px solid var(--border-soft); border-radius:var(--radius-md); background:var(--surface-2);}
+  .catalog-item .item-icon{font-size:24px; flex-shrink:0;}
+  .catalog-item .item-copy{flex:1; min-width:0; text-align:left;}
+  .catalog-item .item-copy strong{display:block; font-size:14px;}
+  .catalog-item .item-copy small{display:block; color:var(--ink-muted); font-size:11.5px; margin-top:2px;}
+  .catalog-item .btn{flex-shrink:0;}
+  .manage-section{border-top:1px solid var(--border-soft); padding-top:16px; margin-top:16px;}
+  .manage-section h3{margin:0 0 10px; font-size:17px;}
+  .inline-form{display:grid; grid-template-columns:1fr 100px; gap:8px; align-items:end;}
+  .inline-form .field{margin-bottom:8px;}
+  .inline-form .wide{grid-column:1 / -1;}
+  .manage-list{display:flex; flex-direction:column; gap:7px; margin-top:10px;}
+  .manage-row{display:flex; align-items:center; gap:8px; padding:8px 10px; border-radius:var(--radius-sm); background:var(--border-soft); font-size:13px;}
+  .manage-row span:first-child{flex:1;}
+  .manage-row small{color:var(--ink-muted);}
+  .manage-row button{background:none; border:0; color:var(--berry); cursor:pointer; font-weight:800; padding:4px;}
   .link-btn{background:none; border:none; color:var(--ink-muted); font-weight:700; font-size:12.5px; cursor:pointer; text-decoration:underline; text-underline-offset:2px; padding:4px;}
   .link-btn:hover{color:var(--meadow-dark);}
 
@@ -331,7 +377,7 @@
   footer.app-footer .instruction-link{display:block; width:max-content; margin:6px auto 0;}
 
   @media (max-width:480px){
-    .grid{grid-template-columns:1fr 1fr;}
+    .grid{grid-template-columns:1fr;}
     .card{padding:16px 12px 14px;}
     .avatar{width:76px; height:76px; font-size:36px;}
     .points-num{font-size:30px;}
@@ -355,8 +401,11 @@
       </div>
     </div>
     <div class="top-actions">
-      <button class="btn btn-ghost btn-sm" id="backupBtn" type="button">🗂️ Backup</button>
-      <button class="btn btn-meadow" id="addChildBtn" type="button">+ Add Child</button>
+      <button class="btn btn-ghost btn-sm" id="parentBtn" type="button">🔒 Parent</button>
+    <button class="btn btn-ghost btn-sm parent-only" id="choresBtn" type="button" hidden>🧹 Chores</button>
+    <button class="btn btn-ghost btn-sm parent-only" id="rewardsBtn" type="button" hidden>🎁 Rewards</button>
+    <button class="btn btn-ghost btn-sm parent-only" id="backupBtn" type="button" hidden>🗂️ Backup</button>
+    <button class="btn btn-meadow parent-only" id="addChildBtn" type="button" hidden>+ Add Child</button>
     </div>
   </div>
 </header>
@@ -366,14 +415,14 @@
     <div class="big">🌻🪴🌻</div>
     <h2>Plant your first Garden Buddy</h2>
     <p>Add a child to start tracking daily points. Give them a name, an age, and a fun avatar, then watch their garden grow as they earn points!</p>
-    <button class="btn btn-meadow" id="emptyAddBtn" type="button">+ Add Your First Child</button>
+    <button class="btn btn-meadow parent-only" id="emptyAddBtn" type="button" hidden>+ Add Your First Child</button>
   </div>
   <div id="grid" class="grid"></div>
 </main>
 
 <footer class="app-footer">
   <div>All data stays saved right in this browser, on this device.</div>
-  <button class="link-btn" id="footerBackupBtn" type="button">Back up or move your data</button>
+  <button class="link-btn parent-only" id="footerBackupBtn" type="button" hidden>Back up or move your data</button>
   <a class="link-btn instruction-link" href="./PWA-INSTRUCTIONS.md" target="_blank" rel="noopener">How to use Sprout Points</a>
 </footer>
 
@@ -425,6 +474,14 @@
   var ADD_REASONS = ["Homework done","Chores done","Being kind","Good manners","Helped a sibling","Great teamwork","Tried something new","Good sportsmanship"];
   var DEDUCT_REASONS = ["Didn't listen","Broke a rule","Unkind words","Skipped a chore","Screen time overrun","Talking back"];
   var REDEEM_REASONS = ["Screen time","Special treat","Toy","Family outing","Stay up late","Pick tonight's dinner","Allowance cash","Friend playdate"];
+  var FEELINGS = [
+    {id:"happy", label:"Happy", emoji:"😊"},
+    {id:"calm", label:"Calm", emoji:"😌"},
+    {id:"frustrated", label:"Frustrated", emoji:"😤"},
+    {id:"tired", label:"Tired", emoji:"😴"},
+    {id:"excited", label:"Excited", emoji:"🤩"},
+    {id:"worried", label:"Worried", emoji:"😟"}
+  ];
 
   var LEVELS = [
     {name:"Tiny Seed", min:0, icon:"🌰"},
@@ -438,10 +495,11 @@
   ];
 
   /* ================= State ================= */
-  var state = { children: [] };
+  var state = { children: [], chores: [], rewards: [], settings: {} };
   var storageOK = true;
   var openMenuId = null;
   var downloadsCap = null;
+  var parentUnlocked = false;
 
   function uid(){
     if (window.crypto && crypto.randomUUID) return crypto.randomUUID();
@@ -453,7 +511,12 @@
       var raw = localStorage.getItem(STORAGE_KEY);
       if (raw){
         var parsed = JSON.parse(raw);
-        if (parsed && Array.isArray(parsed.children)) state = parsed;
+        if (parsed && Array.isArray(parsed.children)){
+          state = parsed;
+          state.chores = Array.isArray(state.chores) ? state.chores : [];
+          state.rewards = Array.isArray(state.rewards) ? state.rewards : [];
+          state.settings = state.settings && typeof state.settings === "object" ? state.settings : {};
+        }
       }
     }catch(e){ storageOK = false; }
   }
@@ -467,19 +530,56 @@
     }
   }
 
+  function hashPin(pin){
+    if (window.crypto && crypto.subtle){
+      return crypto.subtle.digest("SHA-256", new TextEncoder().encode(pin)).then(function(buffer){
+        return Array.from(new Uint8Array(buffer)).map(function(b){ return b.toString(16).padStart(2,"0"); }).join("");
+      });
+    }
+    return Promise.resolve("fallback-" + pin);
+  }
+  function updateParentButton(){
+    var button = document.getElementById("parentBtn");
+    if (button) button.textContent = parentUnlocked ? "🔓 Parent unlocked" : "🔒 Parent";
+    document.querySelectorAll(".parent-only").forEach(function(control){ control.hidden = !parentUnlocked; });
+  }
+  function requestParentAccess(callback){
+    if (parentUnlocked) return callback();
+    openPinModal(!state.settings.pinHash, callback);
+  }
+  function openPinModal(setup, callback){
+    openModal('<div class="modal-head"><div><h2>' + (setup ? "Set parent PIN" : "Parent access") + '</h2><p>' + (setup ? "Choose a 4–6 digit PIN for parent controls." : "Enter the parent PIN to continue.") + '</p></div><button class="btn btn-text" id="closeX" type="button" aria-label="Close">✕</button></div>' +
+      '<div class="field"><label for="pinInput">' + (setup ? "New PIN" : "PIN") + '</label><input type="password" id="pinInput" inputmode="numeric" maxlength="6" placeholder="4–6 digits"></div>' +
+      (setup ? '<div class="field"><label for="pinConfirm">Confirm PIN</label><input type="password" id="pinConfirm" inputmode="numeric" maxlength="6" placeholder="Enter it again"></div>' : '') +
+      '<div class="error-text" id="pinErr"></div><div class="modal-actions"><button class="btn btn-ghost" id="cancelBtn" type="button">Cancel</button><button class="btn btn-meadow" id="pinSaveBtn" type="button">' + (setup ? "Set PIN" : "Unlock") + '</button></div>');
+    document.getElementById("closeX").addEventListener("click", closeModal);
+    document.getElementById("cancelBtn").addEventListener("click", closeModal);
+    document.getElementById("pinSaveBtn").addEventListener("click", function(){
+      var pin = document.getElementById("pinInput").value.trim();
+      var err = document.getElementById("pinErr");
+      if (!/^\d{4,6}$/.test(pin)){ err.textContent = "Use 4–6 digits."; return; }
+      if (setup && pin !== document.getElementById("pinConfirm").value.trim()){ err.textContent = "The PINs do not match."; return; }
+      hashPin(pin).then(function(hash){
+        if (!setup && hash !== state.settings.pinHash){ err.textContent = "That PIN is not correct."; return; }
+        if (setup){ state.settings.pinHash = hash; saveData(); }
+        parentUnlocked = true; updateParentButton(); closeModal(); toast("Parent controls unlocked."); callback();
+      });
+    });
+  }
+
   /* ================= Derived stats ================= */
   function balanceOf(child){
     var b = 0;
     for (var i=0;i<child.transactions.length;i++){
       var t = child.transactions[i];
-      b += (t.type === "add") ? t.amount : -t.amount;
+      b += (t.type === "add" || t.type === "chore") ? t.amount : -t.amount;
     }
     return b;
   }
   function lifetimeOf(child){
     var l = 0;
     for (var i=0;i<child.transactions.length;i++){
-      if (child.transactions[i].type === "add") l += child.transactions[i].amount;
+      if (child.transactions[i].type === "add" || child.transactions[i].type === "chore") l += child.transactions[i].amount;
     }
     return l;
   }
@@ -492,11 +592,11 @@
     return {index:idx, current:cur, next:next, progress:progress};
   }
   function moodOf(child){
-    var relevant = child.transactions.filter(function(t){ return t.type === "add" || t.type === "deduct"; });
+    var relevant = child.transactions.filter(function(t){ return t.type === "add" || t.type === "chore" || t.type === "deduct"; });
     if (relevant.length === 0) return {cls:"mood-new", label:"New Sprout", emoji:"🌱"};
     var recent = relevant.slice(-5);
     var net = 0;
-    for (var i=0;i<recent.length;i++){ net += (recent[i].type === "add") ? recent[i].amount : -recent[i].amount; }
+    for (var i=0;i<recent.length;i++){ net += (recent[i].type === "add" || recent[i].type === "chore") ? recent[i].amount : -recent[i].amount; }
     if (net > 0) return {cls:"mood-sunny", label:"Sunny", emoji:"☀️"};
     if (net === 0) return {cls:"mood-partly", label:"Partly Sunny", emoji:"⛅"};
     return {cls:"mood-cloudy", label:"A little cloudy", emoji:"☁️"};
@@ -506,7 +606,7 @@
     child.transactions.forEach(function(t){
       var d = t.ts.slice(0,10);
       if (!days[d]) days[d] = {add:0, deduct:0};
-      if (t.type === "add") days[d].add++;
+      if (t.type === "add" || t.type === "chore") days[d].add++;
       if (t.type === "deduct") days[d].deduct++;
     });
     var streak = 0;
@@ -525,6 +625,31 @@
       }
     }
     return streak;
+  }
+
+  function localDateKey(date){
+    var d = date || new Date();
+    return d.getFullYear() + "-" + String(d.getMonth()+1).padStart(2,"0") + "-" + String(d.getDate()).padStart(2,"0");
+  }
+  function choreScheduleLabel(days){
+    if (days.length === 7) return "Every day";
+    if (days.join(",") === "1,2,3,4,5") return "Weekdays";
+    if (days.join(",") === "0,6") return "Weekends";
+    return days.map(function(d){ return ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"][d]; }).join(", ");
+  }
+  function choresForToday(child){
+    var day = new Date().getDay();
+    return state.chores.filter(function(chore){
+      return chore.active !== false && (!chore.childId || chore.childId === child.id) && chore.days.indexOf(day) !== -1;
+    });
+  }
+  function completedChoreToday(child, chore){
+    var today = localDateKey();
+    return child.transactions.some(function(t){ return t.type === "chore" && t.choreId === chore.id && localDateKey(new Date(t.ts)) === today; });
+  }
+  function feelingOf(child){
+    if (!child.feeling || child.feeling.date !== localDateKey()) return null;
+    return FEELINGS.find(function(feeling){ return feeling.id === child.feeling.id; }) || null;
   }
 
   /* ================= Avatar rendering ================= */
@@ -558,11 +683,19 @@
   }
 
   /* ================= Toast ================= */
-  function toast(msg, kind){
+  function toast(msg, kind, action){
     var root = document.getElementById("toastRoot");
     var el = document.createElement("div");
     el.className = "toast";
-    el.textContent = (kind === "err" ? "⚠️ " : "") + msg;
+    el.appendChild(document.createTextNode((kind === "err" ? "⚠️ " : "") + msg));
+    if (action){
+      var button = document.createElement("button");
+      button.className = "toast-action";
+      button.type = "button";
+      button.textContent = action.label;
+      button.addEventListener("click", function(){ action.callback(); el.remove(); });
+      el.appendChild(button);
+    }
     root.appendChild(el);
     setTimeout(function(){ el.remove(); }, 3000);
   }
@@ -625,6 +758,9 @@
     var lvl = levelInfo(lifetime);
     var mood = moodOf(child);
     var streak = streakOf(child);
+    var todaysChores = choresForToday(child);
+    var openChores = todaysChores.filter(function(chore){ return !completedChoreToday(child, chore); });
+    var feeling = feelingOf(child);
     var nextLabel = lvl.next ? lvl.next.name : "Max level!";
     return '' +
     '<div class="card" data-id="' + child.id + '">' +
@@ -633,18 +769,23 @@
       '<h3>' + escapeHTML(child.name) + '</h3>' +
       '<div class="age-chip">Age ' + child.age + '</div>' +
       '<div class="points-row"><span class="points-num' + (bal<0?" neg":"") + '">' + bal + '</span><span class="points-label">points</span></div>' +
-      '<div class="mood-pill ' + mood.cls + '">' + mood.emoji + ' ' + mood.label + '</div>' +
+      '<button class="mood-pill ' + mood.cls + '" data-action="mood" data-id="' + child.id + '" type="button" title="Set today\'s feeling">' + mood.emoji + ' ' + mood.label + '</button>' +
+      (feeling ? '<div class="feeling-label">Feeling: ' + feeling.emoji + ' ' + feeling.label + '</div>' : '<div class="feeling-label">Tap mood to share today\'s feeling</div>') +
       (streak >= 2 ? '<div class="streak-chip">🔥 ' + streak + '-day streak</div>' : '') +
       '<div class="level-row">' +
         '<div class="level-label"><span>' + lvl.current.icon + ' ' + lvl.current.name + '</span><span>' + (lvl.next ? "Next: " + nextLabel : "Top level!") + '</span></div>' +
         '<div class="level-track"><div class="level-fill" style="width:' + Math.round(lvl.progress*100) + '%"></div></div>' +
       '</div>' +
+      '<div class="routine-summary' + (todaysChores.length ? '' : ' empty') + '">' +
+        (todaysChores.length ? (openChores.length ? '🧹 ' + openChores.length + ' chore' + (openChores.length===1?'':'s') + ' waiting today' : '✅ Today\'s chores are complete') : 'No chores scheduled today') +
+      '</div>' +
       '<div class="card-actions">' +
         '<button class="btn btn-meadow" data-action="add" data-id="' + child.id + '" type="button">+ Points</button>' +
         '<button class="btn btn-berry" data-action="deduct" data-id="' + child.id + '" type="button">− Points</button>' +
       '</div>' +
-      '<div class="card-actions" style="margin-top:8px;">' +
-        '<button class="btn btn-sky" data-action="redeem" data-id="' + child.id + '" type="button">🎁 Redeem</button>' +
+      '<div class="feature-actions">' +
+        '<button class="feature-action chore" data-action="chores" data-id="' + child.id + '" type="button"><span class="feature-icon">🧹</span><span><strong>Chores</strong><small>View today</small></span></button>' +
+        '<button class="feature-action reward" data-action="catalog" data-id="' + child.id + '" type="button"><span class="feature-icon">🎁</span><span><strong>Rewards</strong><small>Browse &amp; redeem</small></span></button>' +
       '</div>' +
       '<div class="card-foot"><button class="link-btn" data-action="history" data-id="' + child.id + '" type="button">View history &amp; garden chart</button></div>' +
     '</div>';
@@ -663,10 +804,168 @@
         var action = btn.getAttribute("data-action");
         var id = btn.getAttribute("data-id");
         if (action === "menu"){ toggleMenu(id, btn); return; }
-        if (action === "add") return openAddDeductModal(id, "add");
-        if (action === "deduct") return openAddDeductModal(id, "deduct");
+        if (action === "add") return requestParentAccess(function(){ openAddDeductModal(id, "add"); });
+        if (action === "deduct") return requestParentAccess(function(){ openAddDeductModal(id, "deduct"); });
         if (action === "redeem") return openRedeemModal(id);
+        if (action === "chores") return openChoresModal(id);
+        if (action === "catalog") return openCatalogModal(id);
+        if (action === "mood") return openMoodModal(id);
         if (action === "history") return openHistoryModal(id);
+      });
+    });
+  }
+
+  function pointBurst(child, amount){
+    if (reducedMotion()) return;
+    var card = document.querySelector('.card[data-id="' + child.id + '"]');
+    if (!card) return;
+    var el = document.createElement("span");
+    el.className = "point-float";
+    el.textContent = "+" + amount;
+    card.appendChild(el);
+    setTimeout(function(){ el.remove(); }, 1200);
+  }
+
+  function avatarReaction(child, emoji, reaction){
+    if (reducedMotion()) return;
+    var avatar = document.querySelector('.card[data-id="' + child.id + '"] .avatar');
+    if (!avatar) return;
+    avatar.classList.remove("react-gain", "react-minus", "react-redeem");
+    void avatar.offsetWidth;
+    avatar.classList.add("react-" + reaction);
+    var bubble = document.createElement("span");
+    bubble.className = "avatar-reaction";
+    bubble.textContent = emoji;
+    avatar.appendChild(bubble);
+    setTimeout(function(){
+      bubble.remove();
+      avatar.classList.remove("react-" + reaction);
+    }, 1400);
+  }
+
+  function openMoodModal(childId){
+    var child = state.children.find(function(c){ return c.id === childId; });
+    if (!child) return;
+    var current = feelingOf(child);
+    var options = FEELINGS.map(function(feeling){
+      return '<button type="button" class="chip-opt' + (current && current.id === feeling.id ? " sel" : "") + '" data-feeling="' + feeling.id + '">' + feeling.emoji + ' ' + feeling.label + '</button>';
+    }).join("");
+    openModal('<div class="modal-head"><div><h2>How is ' + escapeHTML(child.name) + ' feeling?</h2><p>Choose a feeling for today. You can change it anytime.</p></div><button class="btn btn-text" id="closeX" type="button" aria-label="Close">✕</button></div><div class="field"><div class="badge-row" id="feelingRow">' + options + '</div></div><div class="modal-actions"><button class="btn btn-ghost" id="cancelBtn" type="button">Cancel</button><button class="btn btn-meadow" id="saveFeelingBtn" type="button">Save feeling</button></div>');
+    var selected = current ? current.id : "";
+    document.getElementById("closeX").addEventListener("click", closeModal);
+    document.getElementById("cancelBtn").addEventListener("click", closeModal);
+    document.querySelectorAll("[data-feeling]").forEach(function(btn){
+      btn.addEventListener("click", function(){
+        selected = btn.getAttribute("data-feeling");
+        document.querySelectorAll("[data-feeling]").forEach(function(item){ item.classList.remove("sel"); });
+        btn.classList.add("sel");
+      });
+    });
+    document.getElementById("saveFeelingBtn").addEventListener("click", function(){
+      if (!selected){ toast("Choose a feeling first.", "err"); return; }
+      child.feeling = {id:selected, date:localDateKey()};
+      saveData(); render(); closeModal(); toast("Today's feeling saved!");
+    });
+  }
+
+  /* ================= Chores & Rewards ================= */
+  function openManageModal(section){
+    function renderManage(){
+      var choreRows = state.chores.length ? state.chores.map(function(chore){
+        return '<div class="manage-row"><span>🧹 ' + escapeHTML(chore.name) + '</span><small>+' + chore.points + ' · ' + choreScheduleLabel(chore.days) + '</small><button type="button" data-remove-chore="' + chore.id + '" aria-label="Delete ' + escapeHTML(chore.name) + '">✕</button></div>';
+      }).join("") : '<div class="hint">No chores yet. Add one for the family.</div>';
+      var rewardRows = state.rewards.length ? state.rewards.map(function(reward){
+        return '<div class="manage-row"><span>' + escapeHTML(reward.emoji) + ' ' + escapeHTML(reward.name) + '</span><small>' + reward.cost + ' points</small><button type="button" data-remove-reward="' + reward.id + '" aria-label="Delete ' + escapeHTML(reward.name) + '">✕</button></div>';
+      }).join("") : '<div class="hint">No rewards yet. Add something worth growing toward.</div>';
+      var choreSection =
+        '<div class="manage-section" id="choreManageSection" style="border-top:0; padding-top:0; margin-top:0;"><h3>🧹 Recurring chores</h3>' +
+        '<div class="inline-form"><div class="field"><label for="newChoreName">Chore name</label><input type="text" id="newChoreName" maxlength="40" placeholder="e.g. Put toys away"></div><div class="field"><label for="newChorePoints">Points</label><input type="number" id="newChorePoints" min="1" max="100" value="5"></div><div class="field wide"><label for="newChoreSchedule">Repeats</label><select id="newChoreSchedule"><option value="daily">Every day</option><option value="weekdays">Weekdays</option><option value="weekends">Weekends</option></select></div></div>' +
+        '<button class="btn btn-meadow btn-sm" id="addChoreBtn" type="button">+ Add chore</button><div class="manage-list">' + choreRows + '</div></div>';
+      var rewardSection =
+        '<div class="manage-section" id="rewardManageSection" style="border-top:0; padding-top:0; margin-top:0;"><h3>🎁 Reward catalog</h3>' +
+        '<div class="inline-form"><div class="field"><label for="newRewardName">Reward name</label><input type="text" id="newRewardName" maxlength="40" placeholder="e.g. Pick the movie"></div><div class="field"><label for="newRewardCost">Cost</label><input type="number" id="newRewardCost" min="1" max="10000" value="25"></div><div class="field wide"><label for="newRewardEmoji">Icon</label><input type="text" id="newRewardEmoji" maxlength="4" value="🎁" aria-label="Reward icon"></div></div>' +
+        '<button class="btn btn-sky btn-sm" id="addRewardBtn" type="button">+ Add reward</button><div class="manage-list">' + rewardRows + '</div></div>';
+      document.getElementById("modalBox").innerHTML =
+        '<div class="modal-head"><div><h2>' + (section === "rewards" ? "Reward catalog" : "Recurring chores") + '</h2><p>' + (section === "rewards" ? "Create rewards children can work toward." : "Create routines that earn points each day.") + '</p></div><button class="btn btn-text" id="closeX" type="button" aria-label="Close">✕</button></div>' +
+        (section === "rewards" ? rewardSection : choreSection);
+      document.getElementById("closeX").addEventListener("click", closeModal);
+      var addChoreBtn = document.getElementById("addChoreBtn");
+      if (addChoreBtn) addChoreBtn.addEventListener("click", function(){
+        var name = document.getElementById("newChoreName").value.trim();
+        var points = parseInt(document.getElementById("newChorePoints").value,10);
+        var schedule = document.getElementById("newChoreSchedule").value;
+        if (!name || !points || points < 1){ toast("Enter a chore name and point value.", "err"); return; }
+        state.chores.push({id:uid(), name:name, points:points, days:schedule==="weekdays"?[1,2,3,4,5]:(schedule==="weekends"?[0,6]:[0,1,2,3,4,5,6]), active:true});
+        saveData(); render(); toast("Chore added!"); renderManage();
+      });
+      var addRewardBtn = document.getElementById("addRewardBtn");
+      if (addRewardBtn) addRewardBtn.addEventListener("click", function(){
+        var name = document.getElementById("newRewardName").value.trim();
+        var cost = parseInt(document.getElementById("newRewardCost").value,10);
+        var emoji = document.getElementById("newRewardEmoji").value.trim() || "🎁";
+        if (!name || !cost || cost < 1){ toast("Enter a reward name and point cost.", "err"); return; }
+        state.rewards.push({id:uid(), name:name, cost:cost, emoji:emoji, active:true});
+        saveData(); render(); toast("Reward added!"); renderManage();
+      });
+      document.querySelectorAll("[data-remove-chore]").forEach(function(btn){
+        btn.addEventListener("click", function(){ state.chores = state.chores.filter(function(chore){ return chore.id !== btn.getAttribute("data-remove-chore"); }); saveData(); render(); renderManage(); });
+      });
+      document.querySelectorAll("[data-remove-reward]").forEach(function(btn){
+        btn.addEventListener("click", function(){ state.rewards = state.rewards.filter(function(reward){ return reward.id !== btn.getAttribute("data-remove-reward"); }); saveData(); render(); renderManage(); });
+      });
+    }
+    openModal('<div class="modal-head"><h2>Chores &amp; rewards</h2></div>');
+    renderManage();
+    var focusSection = section === "rewards" ? "rewardManageSection" : "choreManageSection";
+    document.getElementById(focusSection).scrollIntoView({block:"start"});
+  }
+
+  function openChoresModal(childId){
+    var child = state.children.find(function(c){ return c.id === childId; });
+    if (!child) return;
+    var chores = choresForToday(child);
+    var rows = chores.length ? chores.map(function(chore){
+      var done = completedChoreToday(child, chore);
+      return '<div class="catalog-item"><div class="item-icon">' + (done ? '✅' : '🧹') + '</div><div class="item-copy"><strong>' + escapeHTML(chore.name) + '</strong><small>+' + chore.points + ' points</small></div>' + (done ? '<span class="hint">Done today</span>' : '<button class="btn btn-meadow btn-sm" type="button" data-complete-chore="' + chore.id + '">Complete</button>') + '</div>';
+    }).join("") : '<div class="empty-hist">No chores are scheduled for today.</div>';
+    openModal('<div class="modal-head"><div><h2>' + escapeHTML(child.name) + '\'s chores</h2><p>Complete each task once today to grow the garden.</p></div><button class="btn btn-text" id="closeX" type="button" aria-label="Close">✕</button></div><div class="catalog-list">' + rows + '</div>');
+    document.getElementById("closeX").addEventListener("click", closeModal);
+    document.querySelectorAll("[data-complete-chore]").forEach(function(btn){
+      btn.addEventListener("click", function(){
+        var chore = state.chores.find(function(item){ return item.id === btn.getAttribute("data-complete-chore"); });
+        if (!chore || completedChoreToday(child, chore)) return;
+        var transactionId = uid();
+        child.transactions.push({id:transactionId, ts:new Date().toISOString(), type:"chore", amount:chore.points, note:"Chore: " + chore.name, choreId:chore.id});
+        saveData(); render(); pointBurst(child, chore.points); avatarReaction(child, "😊", "gain"); closeModal();
+        toast("+" + chore.points + " points for " + child.name + "!", "", {label:"Undo", callback:function(){
+          requestParentAccess(function(){
+            child.transactions = child.transactions.filter(function(t){ return t.id !== transactionId; });
+            saveData(); render(); toast("Chore completion undone.");
+          });
+        }});
+      });
+    });
+  }
+
+  function openCatalogModal(childId){
+    var child = state.children.find(function(c){ return c.id === childId; });
+    if (!child) return;
+    var balance = balanceOf(child);
+    var rows = state.rewards.filter(function(reward){ return reward.active !== false; }).map(function(reward){
+      var affordable = balance >= reward.cost;
+      return '<div class="catalog-item"><div class="item-icon">' + escapeHTML(reward.emoji) + '</div><div class="item-copy"><strong>' + escapeHTML(reward.name) + '</strong><small>' + reward.cost + ' points</small></div><button class="btn btn-sky btn-sm" type="button" data-claim-reward="' + reward.id + '" ' + (affordable ? '' : 'disabled') + '>' + (affordable ? 'Redeem' : 'Need more') + '</button></div>';
+    }).join("") || '<div class="empty-hist">No rewards have been added yet.</div>';
+    openModal('<div class="modal-head"><div><h2>' + escapeHTML(child.name) + '\'s rewards</h2><p>Available balance: <strong>' + balance + ' points</strong></p></div><button class="btn btn-text" id="closeX" type="button" aria-label="Close">✕</button></div><div class="catalog-list">' + rows + '</div><div class="modal-actions"><button class="btn btn-ghost" id="manualRedeemBtn" type="button" ' + (balance < 1 ? 'disabled' : '') + '>Redeem manually</button></div>');
+    document.getElementById("closeX").addEventListener("click", closeModal);
+    document.getElementById("manualRedeemBtn").addEventListener("click", function(){ requestParentAccess(function(){ closeModal(); openRedeemModal(childId); }); });
+    document.querySelectorAll("[data-claim-reward]").forEach(function(btn){
+      btn.addEventListener("click", function(){
+        requestParentAccess(function(){
+          var reward = state.rewards.find(function(item){ return item.id === btn.getAttribute("data-claim-reward"); });
+          if (!reward || balanceOf(child) < reward.cost) return;
+          child.transactions.push({id:uid(), ts:new Date().toISOString(), type:"redeem", amount:reward.cost, note:"Reward: " + reward.name, rewardId:reward.id});
+          saveData(); render(); closeModal(); avatarReaction(child, "🤩", "redeem"); confettiBurst(child.avatar.color); toast("🎁 " + child.name + " redeemed " + reward.name + "!");
+        });
       });
     });
   }
@@ -688,9 +987,9 @@
         ev.stopPropagation();
         pop.remove(); openMenuId = null;
         var m = b.getAttribute("data-m");
-        if (m === "edit") openChildModal(id);
+        if (m === "edit") requestParentAccess(function(){ openChildModal(id); });
         if (m === "history") openHistoryModal(id);
-        if (m === "delete") confirmDeleteChild(id);
+        if (m === "delete") requestParentAccess(function(){ confirmDeleteChild(id); });
       });
     });
     setTimeout(function(){
@@ -870,6 +1169,8 @@
     var beforeLevel = levelInfo(lifetimeOf(child)).index;
     child.transactions.push({ id: uid(), ts: new Date().toISOString(), type: type, amount: amount, note: note });
     saveData(); render();
+    if (type === "add") { pointBurst(child, amount); avatarReaction(child, "😊", "gain"); }
+    if (type === "deduct") avatarReaction(child, "😟", "minus");
     if (type === "add"){
       var afterLevel = levelInfo(lifetimeOf(child)).index;
       if (afterLevel > beforeLevel){
@@ -946,6 +1247,7 @@
       if (!note){ err.textContent = "Please pick or write what they're redeeming for."; return; }
       child.transactions.push({ id: uid(), ts: new Date().toISOString(), type:"redeem", amount: amount, note: "Redeemed: " + note });
       saveData(); render(); closeModal();
+      avatarReaction(child, "🤩", "redeem");
       confettiBurst(child.avatar.color);
       toast("🎁 " + child.name + " redeemed " + amount + " points for " + note + "!");
     });
@@ -973,7 +1275,7 @@
     child.transactions.forEach(function(t){
       if (t.type === "redeem") return;
       var key = t.ts.slice(0,10);
-      if (map[key]) map[key].net += (t.type==="add"?t.amount:-t.amount);
+      if (map[key]) map[key].net += ((t.type==="add" || t.type==="chore")?t.amount:-t.amount);
     });
     var maxAbs = Math.max(1, Math.max.apply(null, days.map(function(d){return Math.abs(d.net);})));
     var w = 22, gap = 6, h = 90;
@@ -998,10 +1300,10 @@
     var lvl = levelInfo(lifetimeOf(child));
 
     function txRowHTML(t){
-      var icon = t.type === "add" ? "🌱" : (t.type === "deduct" ? "🍂" : "🎁");
+      var icon = (t.type === "add" || t.type === "chore") ? "🌱" : (t.type === "deduct" ? "🍂" : "🎁");
       var cls = t.type;
-      var sign = t.type === "add" ? "+" : "−";
-      var amtCls = t.type === "add" ? "pos" : "negv";
+      var sign = (t.type === "add" || t.type === "chore") ? "+" : "−";
+      var amtCls = (t.type === "add" || t.type === "chore") ? "pos" : "negv";
       var time = new Date(t.ts).toLocaleTimeString(undefined, {hour:"numeric", minute:"2-digit"});
       return '<div class="tx-row" data-tx="' + t.id + '">' +
         '<div class="tx-icon ' + cls + '">' + icon + '</div>' +
@@ -1045,11 +1347,13 @@
       document.getElementById("closeX").addEventListener("click", closeModal);
       document.querySelectorAll("[data-del]").forEach(function(btn){
         btn.addEventListener("click", function(){
-          var txId = btn.getAttribute("data-del");
-          child.transactions = child.transactions.filter(function(t){ return t.id !== txId; });
-          saveData(); render();
-          var box = document.getElementById("modalBox");
-          if (box){ box.innerHTML = html(); wire(); }
+          requestParentAccess(function(){
+            var txId = btn.getAttribute("data-del");
+            child.transactions = child.transactions.filter(function(t){ return t.id !== txId; });
+            saveData(); render();
+            var box = document.getElementById("modalBox");
+            if (box){ box.innerHTML = html(); wire(); }
+          });
         });
       });
     }
@@ -1151,6 +1455,9 @@
       document.getElementById("cancelBtn").addEventListener("click", closeModal);
       document.getElementById("confirmBtn").addEventListener("click", function(){
         state = parsed;
+        state.chores = Array.isArray(state.chores) ? state.chores : [];
+        state.rewards = Array.isArray(state.rewards) ? state.rewards : [];
+        state.settings = state.settings && typeof state.settings === "object" ? state.settings : {};
         saveData(); render(); closeModal();
         toast("Backup restored!");
       });
@@ -1162,10 +1469,17 @@
   function init(){
     loadData();
     render();
-    document.getElementById("addChildBtn").addEventListener("click", function(){ openChildModal(null); });
-    document.getElementById("emptyAddBtn").addEventListener("click", function(){ openChildModal(null); });
-    document.getElementById("backupBtn").addEventListener("click", openBackupModal);
-    document.getElementById("footerBackupBtn").addEventListener("click", openBackupModal);
+    updateParentButton();
+    document.getElementById("addChildBtn").addEventListener("click", function(){ requestParentAccess(function(){ openChildModal(null); }); });
+    document.getElementById("emptyAddBtn").addEventListener("click", function(){ requestParentAccess(function(){ openChildModal(null); }); });
+    document.getElementById("choresBtn").addEventListener("click", function(){ requestParentAccess(function(){ openManageModal("chores"); }); });
+    document.getElementById("rewardsBtn").addEventListener("click", function(){ requestParentAccess(function(){ openManageModal("rewards"); }); });
+    document.getElementById("backupBtn").addEventListener("click", function(){ requestParentAccess(openBackupModal); });
+    document.getElementById("footerBackupBtn").addEventListener("click", function(){ requestParentAccess(openBackupModal); });
+    document.getElementById("parentBtn").addEventListener("click", function(){
+      if (parentUnlocked){ parentUnlocked = false; updateParentButton(); toast("Parent controls locked."); }
+      else requestParentAccess(function(){});
+    });
     document.addEventListener("keydown", function(e){ if (e.key === "Escape") closeModal(); });
 
     if (window.claude && window.claude.use){
